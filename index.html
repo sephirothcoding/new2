@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XatSpace Modern și Dinamic</title>
+    <title>XatSpace cu Efect Sticlă Spargă</title>
     <style>
         /* Reset margin and padding */
         * {
@@ -16,19 +16,20 @@
             font-family: 'Segoe UI', sans-serif;
             background-color: #1e1e2f;
             color: #ffffff;
-            overflow-x: hidden;
+            overflow: hidden;
+            position: relative;
         }
 
         .container {
             max-width: 900px;
             margin: 50px auto;
-            background-color: #27293d;
+            background-color: rgba(39, 41, 61, 0.85);
             border-radius: 12px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
             padding: 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            z-index: 1;
         }
 
         .header {
@@ -101,25 +102,14 @@
             transform: translateY(-5px);
         }
 
-        .ripple {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 75, 43, 0.1);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: rippleEffect 3s infinite linear;
-        }
-
         footer {
             text-align: center;
             padding: 15px 0;
             font-size: 0.8rem;
-            background-color: #1e1e2f;
+            background-color: rgba(39, 41, 61, 0.85);
             color: #999;
             border-radius: 0 0 12px 12px;
+            position: relative;
         }
 
         footer a {
@@ -131,7 +121,27 @@
             text-decoration: underline;
         }
 
-        /* Animations */
+        /* Glass Break Effect */
+        .glass-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .glass-shard {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform-origin: center;
+            animation: fall 4s infinite ease-in-out;
+        }
+
         @keyframes slideIn {
             from { transform: translateX(-100%); }
             to { transform: translateX(0); }
@@ -154,18 +164,19 @@
             100% { transform: scale(1); }
         }
 
-        @keyframes rippleEffect {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        @keyframes fall {
+            0% { transform: scale(0.8) rotate(0deg) translateY(-100px); }
+            100% { transform: scale(0.8) rotate(720deg) translateY(110vh); }
         }
     </style>
 </head>
 <body>
 
+    <div class="glass-container" id="glassContainer"></div>
+
     <div class="container">
         <!-- Header Section -->
         <div class="header">
-            <div class="ripple"></div>
             <h1>Bine ai venit pe xatspace!</h1>
             <p>Un colț modern, dinamic și interactiv</p>
         </div>
@@ -191,6 +202,31 @@
             <p>© 2024 Xatspace | <a href="#">Contact</a></p>
         </footer>
     </div>
+
+    <script>
+        // JavaScript to create glass shards and animate them
+        const glassContainer = document.getElementById('glassContainer');
+        
+        function createShard() {
+            const shard = document.createElement('div');
+            shard.classList.add('glass-shard');
+            const size = Math.random() * 150 + 50;
+            shard.style.width = `${size}px`;
+            shard.style.height = `${size / 2}px`;
+            shard.style.top = `${Math.random() * window.innerHeight}px`;
+            shard.style.left = `${Math.random() * window.innerWidth}px`;
+            shard.style.transform = `rotate(${Math.random() * 360}deg)`;
+            shard.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            shard.style.animationDelay = `${Math.random() * 3}s`;
+            glassContainer.appendChild(shard);
+
+            setTimeout(() => {
+                glassContainer.removeChild(shard);
+            }, 5000);
+        }
+
+        setInterval(createShard, 300);
+    </script>
 
 </body>
 </html>
